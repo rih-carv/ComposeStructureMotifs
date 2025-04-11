@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -42,9 +43,11 @@ class MainActivity : ComponentActivity() {
 }
 
 val examplesMap = mapOf<String, @Composable () -> Unit>(
-    "Remember + state" to { CounterButton() },
+    "Remember saveable + state" to { CounterButtonWithRememberSaveableAndState() },
+    "Remember + state" to { CounterButtonWithRememberAndState() },
     "Only state + recomposition" to { CounterButtonWithOnlyStateAndRecomposition() },
     "Only remember" to { CounterButtonWithOnlyRemember() },
+    "Only remember saveable" to { CounterButtonWithOnlyRememberSaveable() },
     "Simple var" to { CounterButtonWithSimpleVar() },
     "Simple var + recomposition" to { CounterButtonWithSimpleVarAndRecomposition() },
 )
@@ -65,7 +68,25 @@ fun ButtonExamples(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CounterButton(modifier: Modifier = Modifier) {
+fun CounterButtonWithRememberSaveableAndState(modifier: Modifier = Modifier) {
+    var counter by rememberSaveable { mutableIntStateOf(0) }
+    var update by remember { mutableIntStateOf(0) }
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
+    ) {
+        Button(onClick = { counter++ }) {
+            Text(text = "Clicks: $counter, Update: $update")
+        }
+        Button(onClick = { update++ }) {
+            Text(text = "Update")
+        }
+    }
+}
+
+@Composable
+fun CounterButtonWithRememberAndState(modifier: Modifier = Modifier) {
     var counter by remember { mutableIntStateOf(0) }
     var update by remember { mutableIntStateOf(0) }
 
@@ -107,6 +128,24 @@ fun CounterButtonWithOnlyStateAndRecomposition(modifier: Modifier = Modifier) {
 @Composable
 fun CounterButtonWithOnlyRemember(modifier: Modifier = Modifier) {
     var counter = remember { 0 }
+    var update by remember { mutableIntStateOf(0) }
+
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier
+    ) {
+        Button(onClick = { counter++ }) {
+            Text(text = "Clicks: $counter, Update: $update")
+        }
+        Button(onClick = { update++ }) {
+            Text(text = "Update")
+        }
+    }
+}
+
+@Composable
+fun CounterButtonWithOnlyRememberSaveable(modifier: Modifier = Modifier) {
+    var counter = rememberSaveable { 0 }
     var update by remember { mutableIntStateOf(0) }
 
     Row(
