@@ -161,6 +161,10 @@ fun CounterButtonWithOnlyRememberSaveable(modifier: Modifier = Modifier) {
     }
 }
 
+var outer = 0
+var row = 0
+var button = 0
+
 @Composable
 fun CounterButtonWithSimpleVar(modifier: Modifier = Modifier) {
     var counter = 0
@@ -171,13 +175,21 @@ fun CounterButtonWithSimpleVar(modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         Button(onClick = { counter++ }) {
-            Text(text = "Clicks: $counter, Update: $update")
+            Text(text = "Clicks: $counter, Update: $update\n" +
+                    "Outer: $outer, Row: $row, Button: $button")
+            button++
         }
         Button(onClick = { update++ }) {
             Text(text = "Update")
         }
+        row++
     }
+    outer++
 }
+
+var outer2 = 0
+var row2 = 0
+var button2 = 0
 
 @Composable
 fun CounterButtonWithSimpleVarAndRecomposition(modifier: Modifier = Modifier) {
@@ -192,12 +204,16 @@ fun CounterButtonWithSimpleVarAndRecomposition(modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         Button(onClick = { counter++ }) {
-            Text(text = "Clicks: $counter, Update: $update")
+            Text(text = "Clicks: $counter, Update: $update\n" +
+                    "Outer: $outer2, Row: $row2, Button: $button2")
+            button2++
         }
         Button(onClick = { update++ }) {
             Text(text = "Update")
         }
+        row2++
     }
+    outer2++
 }
 
 @Preview(showBackground = true)
